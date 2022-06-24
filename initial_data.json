@@ -1,0 +1,19 @@
+[
+    {
+        "model": "restapp.customuser",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$Mq3VUxk76LONEdwM0FhiMY$uIG/rROvt3diMYUrhdZvNtjo/Lmlh7Gir/aunbwsoO4=",
+            "last_login": "2022-06-24T21:39:57.774Z",
+            "is_superuser": true,
+            "first_name": "",
+            "last_name": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-06-24T02:34:13.533Z",
+            "email": "test@test.com",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]
