@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'restapp'
 ]
 
+AUTH_USER_MODEL = 'restapp.CustomUser'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
