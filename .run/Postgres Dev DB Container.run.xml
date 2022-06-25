@@ -7,11 +7,15 @@
         <option name="envVars">
           <list>
             <DockerEnvVarImpl>
+              <option name="name" value="POSTGRES_DB" />
+              <option name="value" value="dolunay" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
               <option name="name" value="POSTGRES_HOST_AUTH_METHOD" />
               <option name="value" value="trust" />
             </DockerEnvVarImpl>
             <DockerEnvVarImpl>
-              <option name="name" value="POSTGRES_DB" />
+              <option name="name" value="POSTGRES_USER" />
               <option name="value" value="dolunay" />
             </DockerEnvVarImpl>
           </list>
