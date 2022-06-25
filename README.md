@@ -1,3 +1,6 @@
+![django-test](https://github.com/alfabalf/dolunay/actions/workflows/django-test.yaml/badge.svg) [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-310/)
+    
+
 ## dolunay
 
 ### Dump and Load initial data
