@@ -5,6 +5,5 @@ pytz==2022.1
 sqlparse==0.4.2
 typing-extensions==4.1.1
 psycopg2-binary
-#psycopg2
 PyJWT==v1.7.1
 djangorestframework-simplejwt
