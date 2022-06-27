@@ -2,7 +2,12 @@ name: Deploy to ECR
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
 jobs:
   build:
