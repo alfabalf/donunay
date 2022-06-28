@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "1111:5432"
+    environment:
+      - POSTGRES_USER=dolunay
+      - POSTGRES_PASSWORD=dolunay
+      - POSTGRES_DB=dolunay
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U dolunay" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+volumes:
+  postgres_data:

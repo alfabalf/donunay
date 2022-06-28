@@ -3,18 +3,23 @@
 
 ## dolunay
 
-### Run it
+### Make It Go
 
-Start app and postgres containers in docker-compose, and migrate db
 ```bash
-docker-compose up
+docker-compose up -d
+export LOCALSTACK_ENDPOINT_URL=http://localhost:4566
+aws --endpoint-url=$LOCALSTACK_ENDPOINT_URL s3 mb s3://dolunay-storage
 docker-compose exec web python manage.py migrate
+ docker-compose exec web python manage.py loaddata initial_data.json
 ```
 
 Goto: http://localhost:8000/
 
-To load intial data (contains superuser: test@test.com/password)
+### Run Tests
 ```bash
- docker-compose exec web python manage.py loaddata initial_data.json
+docker-compose -f docker-compose-dev.yaml up -d 
+export LOCALSTACK_ENDPOINT_URL=http://localhost:4566
+aws --endpoint-url=$LOCALSTACK_ENDPOINT_URL s3 mb s3://dolunay-storage
+cd api
+python manage.py test
 ```
-

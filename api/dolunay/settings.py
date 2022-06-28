@@ -81,30 +81,16 @@ WSGI_APPLICATION = 'dolunay.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-
-if os.getenv('GITHUB_WORKFLOW'):
-    DATABASES = {
+DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'github-actions',
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
+            'NAME': 'dolunay',
+            'USER': 'dolunay',
+            'PASSWORD': 'dolunay',
             'HOST': 'localhost',
-            'PORT': '5432'
+            'PORT': '1111'
         }
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
-            'NAME': os.environ.get('DB_NAME', 'dolunay'),
-            'USER': os.environ.get('DB_USER', 'dolunay'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'dolunay'),
-            'HOST': os.environ.get('DB_HOST', 'localhost'),
-            'PORT': os.environ.get('DB_PORT', '1111')
-        }
-    }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -158,3 +144,8 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+AWS_REGION = 'ap-southeast-2'
+AWS_PROFILE = 'localstack'
+ENDPOINT_URL = 'http://localhost:4566'
+S3_BUCKET = 'dolunay-storage'
