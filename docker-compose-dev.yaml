@@ -7,8 +7,6 @@ services:
       - "4566:4566"
   db:
     image: postgres:13.0-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     ports:
       - "1111:5432"
     environment:
@@ -20,7 +18,3 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-
-volumes:
-  postgres_data:

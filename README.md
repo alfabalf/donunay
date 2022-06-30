@@ -3,23 +3,31 @@
 
 ## dolunay
 
-### Make It Go
+### Run It
+
+Run docker-compose for supporting services:
+- localstack for local s3 endpoint
+- postgres
 
 ```bash
-docker-compose up -d
-export LOCALSTACK_ENDPOINT_URL=http://localhost:4566
-aws --endpoint-url=$LOCALSTACK_ENDPOINT_URL s3 mb s3://dolunay-storage
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py loaddata initial_data.json
+docker-compose -f docker-compose-dev.yaml up --force-recreate --renew-anon-volumes
 ```
 
-Goto: http://localhost:8000/
-
-### Run Tests
+#### Run tests
 ```bash
-docker-compose -f docker-compose-dev.yaml up -d 
-export LOCALSTACK_ENDPOINT_URL=http://localhost:4566
-aws --endpoint-url=$LOCALSTACK_ENDPOINT_URL s3 mb s3://dolunay-storage
-cd api
 python manage.py test
 ```
+
+### Run API
+```bash
+python manage.py migrate
+python manage.py loaddata initial_data.json
+python manage.py runserver
+```
+
+Access admin panel at http://localhost:8000/admin
+ - username: test@test.com
+ - password: password
+
+
+
