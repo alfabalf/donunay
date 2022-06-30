@@ -10,7 +10,8 @@ from restapp.uploader.s3_tools import Bucket
 class BucketTests(TestCase):
 
     bucket = str(uuid.uuid4())
-    s3 = boto3.client("s3", region_name='ap-southeast-2', endpoint_url='http://localhost:4566')
+    session = boto3.session.Session(profile_name=settings.AWS_PROFILE)
+    s3 = session.client("s3", region_name='ap-southeast-2', endpoint_url='http://localhost:4566')
 
     def setUp(self):
         try:

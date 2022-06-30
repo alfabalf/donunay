@@ -9,7 +9,8 @@ class RestappConfig(AppConfig):
     name = 'restapp'
 
     def ready(self):
-        client = boto3.client("s3", region_name=settings.AWS_REGION, endpoint_url=settings.ENDPOINT_URL)
+        session = boto3.session.Session(profile_name=settings.AWS_PROFILE)
+        client = session.client("s3", region_name=settings.AWS_REGION, endpoint_url=settings.ENDPOINT_URL)
         try:
             client.create_bucket(Bucket=settings.S3_BUCKET, CreateBucketConfiguration={'LocationConstraint': settings.AWS_REGION})
             print("created bucket {}".format(settings.S3_BUCKET))

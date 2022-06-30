@@ -9,7 +9,8 @@ class Bucket(object):
             self.__dict__ = Bucket.__monostate
         elif not Bucket.__monostate and aws_profile and s3_bucket and endpoint_url and aws_region:
             Bucket.__monostate = self.__dict__
-            self.client = boto3.client("s3", region_name=aws_region, endpoint_url=endpoint_url)
+            session = boto3.session.Session(profile_name=aws_profile)
+            self.client = session.client("s3", region_name=aws_region, endpoint_url=endpoint_url)
             self.s3_bucket = s3_bucket
             self.aws_profile = aws_profile
             self.aws_region = aws_region
