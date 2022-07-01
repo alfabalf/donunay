@@ -7,10 +7,9 @@ from django.conf import settings
 from restapp.models import Album
 
 import boto3
-import botocore
 
 
-class APITests(TestCase):
+class ViewAlbumTests(TestCase):
 
     default_password = 'password'
     bucket = str(uuid.uuid4())
@@ -31,7 +30,7 @@ class APITests(TestCase):
         with open('./restapp/tests/resources/album_cover.jpeg', 'rb') as f:
             form = {
                 "file": f,
-                "json": json.dumps({"name": name, "description": description})
+                "data": json.dumps({"name": name, "description": description})
             }
             response = self.client.post('/api/album/', data=form)
             self.assertEqual(response.status_code, 200)
@@ -48,7 +47,7 @@ class APITests(TestCase):
         with open('./restapp/tests/resources/album_cover.jpeg', 'rb') as f:
             form = {
                 "file": f,
-                "json": json.dumps({"name": name, "description": description})
+                "data": json.dumps({"name": name, "description": description})
             }
             response = self.client.post('/api/album/', data=form)
             self.assertEqual(response.status_code, 200)

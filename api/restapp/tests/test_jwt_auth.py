@@ -24,7 +24,6 @@ class JWTTests(TestCase):
 
         user = self.create_user('test@test.com', self.default_password)
         response = self.client.post('/api/token/', {'email': user.email, 'password': self.default_password}, format='json')
-        print(response.data)
         assert response.status_code == 200
         assert 'access' in response.data
         assert re.match('^[\w-]*\.[\w-]*\.[\w-]*$', response.data['access'])

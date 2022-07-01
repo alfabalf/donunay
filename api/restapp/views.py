@@ -39,7 +39,7 @@ class AlbumView(APIView):
         except client.S3ClientException as e:
             return Response("could not store image")
 
-        data = json.loads(request.data['json'])
+        data = json.loads(request.data['data'])
         serializer = AlbumSerializer(data={'uuid': _uuid, 'name': data['name'], 'description': data['description'], 'cover_image_key': cover_image_key})
 
         if serializer.is_valid():
