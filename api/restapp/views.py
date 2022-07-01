@@ -49,3 +49,11 @@ class AlbumView(APIView):
 
         return Response(serializer.data)
 
+
+class AlbumDetail(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, _uuid):
+        serializer = AlbumSerializer(Album.objects.get(uuid=_uuid))
+        return Response(serializer.data)
+

@@ -58,11 +58,20 @@ class ViewAlbumTests(TestCase):
         assert str(album.uuid) in album.cover_image_key
 
 
-    def test_get_album(self):
+    def test_list_albums(self):
         album = Album.objects.create(uuid=str(uuid.uuid4()), name="test album", description="this is a description", )
         response = self.client.get('/api/album/', format='json')
 
         assert response.status_code == 200
         assert response.data[0]['name'] == album.name
         assert response.data[0]['description'] == album.description
+
+    def test_get_album(self):
+        _uuid = str(uuid.uuid4())
+        album = Album.objects.create(uuid=_uuid, name="test album", description="this is a description", )
+        response = self.client.get('/api/album/{}'.format(_uuid), format='json')
+
+        assert response.status_code == 200
+        assert response.data['name'] == album.name
+        assert response.data['description'] == album.description
 
