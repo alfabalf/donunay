@@ -37,3 +37,17 @@ class BucketTests(TestCase):
         assert client.object_exists(key)
         assert client.get_object_content_text(key) == content
 
+    def test_s3_client_can_delete_object(self):
+        key = 'the/key'
+
+        client = self.configured_client()
+        client.write_binary(open('./restapp/tests/resources/album_cover.jpeg', 'rb'), key)
+        assert self.s3.get_object(Bucket=self.bucket, Key=key)
+
+        client = self.configured_client()
+        client.delete_object(key)
+
+        try:
+            self.s3.get_object(Bucket=self.bucket, Key=key)
+        except:
+            assert True

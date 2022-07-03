@@ -18,7 +18,6 @@ class Bucket(object):
         else:
             raise ValueError("Singleton must be instantiated first with parameters")
 
-
     def bucket_exists(self, bucket_name):
         try:
             self.client.get_bucket_acl(Bucket=bucket_name)
@@ -39,6 +38,12 @@ class Bucket(object):
                 Body=bytes_io, Bucket=self.s3_bucket, Key=key)
         except Exception as e:
             raise self.S3ClientException("could not write binary file: {}".format(str(e)), self)
+
+    def delete_object(self, key):
+        try:
+            self.client.delete_object(Bucket=self.s3_bucket, Key=key)
+        except Exception as e:
+            raise self.S3ClientException("could not delete object: {}".format(str(e)), self)
 
     def _get_object(self, key):
         return self.client.get_object(Bucket=self.s3_bucket, Key=key)
