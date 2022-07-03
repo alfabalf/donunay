@@ -149,3 +149,10 @@ AWS_REGION = 'ap-southeast-2'
 AWS_PROFILE = 'localstack'
 ENDPOINT_URL = 'http://localhost:4566'
 S3_BUCKET = 'dolunay-storage'
+
+THUMBNAIL_SIZES = [
+    (800, 800),
+    (600, 600),
+    (400, 400),
+    (200, 200)
+]
