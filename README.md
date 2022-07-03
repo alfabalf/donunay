@@ -33,17 +33,18 @@ Access admin panel at http://localhost:8000/admin
 
 ```bash
 NEW_ALBUM_ID=$(curl -F \
-  json="{\"name\": \"My Album\", \"description\": \"good times\"}" \
-  -F file=@api/restapp/tests/resources/album_cover.jpeg \
-  http://localhost:8000/api/album | jq '.uuid' --raw-output)
+  data="{\"name\": \"First Album\", \"description\": \"good times\", \"start_date\": \"1981-01-01\", \"end_date\": \"1981-12-01\" }" \
+  -F file=@api/restapp/tests/resources/sample_album_cover.jpg \
+  http://localhost:8000/api/album | jq '.id' --raw-output)
 
 curl http://localhost:8000/api/album/$NEW_ALBUM_ID | jq
 {
-  "uuid": "1b99834a-0c6e-4880-9300-01a275d4b955",
-  "name": "My Album",
+  "id": 1,
+  "name": "First Album",
   "description": "good times",
-  "cover_image_key": "album/1b99834a-0c6e-4880-9300-01a275d4b955"
+  "cover_image_key": "album/b4c4f307-3ca7-4080-8ecc-912d6385964f",
+  "start_date": "1981-01-01",
+  "end_date": "1981-12-01"
 }
-
 ```
 
