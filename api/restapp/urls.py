@@ -14,5 +14,5 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/authcheck/', AuthTestView.as_view(), name='test-auth'),
     re_path('api/album/?$', AlbumView.as_view(), name='album-list'),
-    path('api/album/<str:_uuid>', AlbumDetail.as_view(), name='album-detail'),
+    path('api/album/<int:pk>', AlbumDetail.as_view(), name='album-detail'),
 ]

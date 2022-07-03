@@ -3,6 +3,8 @@ from django.conf import settings
 
 import boto3
 
+from restapp.uploader.s3_tools import Bucket
+
 
 class RestappConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
@@ -16,6 +18,9 @@ class RestappConfig(AppConfig):
             print("created bucket {}".format(settings.S3_BUCKET))
         except Exception as e:
             print(e)
+
+        # initialise Singleton Bucket tool
+        Bucket(settings.AWS_PROFILE, settings.S3_BUCKET, settings.ENDPOINT_URL, settings.AWS_REGION)
 
 
 
