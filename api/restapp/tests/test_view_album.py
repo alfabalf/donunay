@@ -65,7 +65,6 @@ class ViewAlbumTests(TestCase):
         response = self.client.get('/api/album/', format='json')
 
         assert response.status_code == 200
-        print(response.data[0])
         assert response.data[0]['name'] == album1.name
         assert response.data[0]['description'] == album1.description
         assert response.data[0]['cover_image_key'] == album1.cover_image_key

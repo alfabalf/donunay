@@ -9,16 +9,15 @@ from restapp.uploader.s3_tools import Bucket
 
 class BucketTests(TestCase):
 
-    bucket = str(uuid.uuid4())
+    bucket = settings.S3_BUCKET
     session = boto3.session.Session(profile_name=settings.AWS_PROFILE)
     s3 = session.client("s3", region_name='ap-southeast-2', endpoint_url='http://localhost:4566')
 
     def setUp(self):
         try:
-            self.s3.delete_bucket(Bucket=self.bucket)
-        except Exception as e:
+            self.s3.create_bucket(Bucket=self.bucket, CreateBucketConfiguration={'LocationConstraint': settings.AWS_REGION})
+        except:
             pass
-        self.s3.create_bucket(Bucket=self.bucket, CreateBucketConfiguration={'LocationConstraint': settings.AWS_REGION})
 
     def configured_client(self):
         return Bucket(settings.AWS_PROFILE, self.bucket, settings.ENDPOINT_URL, settings.AWS_REGION)
@@ -41,7 +40,7 @@ class BucketTests(TestCase):
         key = 'the/key'
 
         client = self.configured_client()
-        client.write_binary(open('./restapp/tests/resources/album_cover.jpeg', 'rb'), key)
+        client.write_binary(open('./restapp/tests/resources/sample_album_cover.jpg', 'rb'), key)
         assert self.s3.get_object(Bucket=self.bucket, Key=key)
 
         client = self.configured_client()
