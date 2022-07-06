@@ -39,6 +39,13 @@ class Bucket(object):
         except Exception as e:
             raise self.S3ClientException("could not write binary file: {}".format(str(e)), self)
 
+    def list_objects_at_prefix(self, prefix=''):
+        try:
+            result = self.client.list_objects(Bucket=self.s3_bucket, Prefix=prefix)
+            return [item['Key'] for item in result['Contents']]
+        except Exception as e:
+            raise self.S3ClientException("could not list at prefix: {}".format(prefix), self)
+
     def delete_object(self, key):
         try:
             self.client.delete_object(Bucket=self.s3_bucket, Key=key)

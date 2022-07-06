@@ -50,3 +50,21 @@ class BucketTests(TestCase):
             self.s3.get_object(Bucket=self.bucket, Key=key)
         except:
             assert True
+
+    def test_s3_client_can_list_objects_at_prefix(self):
+        path = 'somefolder/'
+
+        client = self.configured_client()
+        key1 = path + 'file1'
+        key2 = path + 'file2'
+        key3 = 'somefolder_wont_match/' + 'file3'
+        client.write_binary(open('./restapp/tests/resources/sample_album_cover.jpg', 'rb'), key1)
+        client.write_binary(open('./restapp/tests/resources/sample_album_cover.jpg', 'rb'), key2)
+        client.write_binary(open('./restapp/tests/resources/sample_album_cover.jpg', 'rb'), key3)
+
+        object_list = client.list_objects_at_prefix(path)
+
+        assert len(object_list) == 2
+        assert object_list[0] == key1
+        assert object_list[1] == key2
+
