@@ -1,6 +1,7 @@
 import json
 import uuid
 import datetime
+import re
 
 from django.test import TestCase
 from django.conf import settings
@@ -30,6 +31,20 @@ class ViewAlbumTests(TestCase):
             "end_date": end_date
         }
 
+    @staticmethod
+    def artifact_data_payload(album_id):
+        album_id = album_id
+        caption = "the caption"
+        details = "some describing details"
+        date = datetime.date(1981, 6, 6)
+
+        return {
+            "album_id": album_id,
+            "caption": caption,
+            "details": details,
+            "date": date
+        }
+
     def setUp(self):
         try:
             self.s3.delete_bucket(Bucket=self.bucket)
@@ -43,7 +58,7 @@ class ViewAlbumTests(TestCase):
 
         with open('./restapp/tests/resources/sample_album_cover.jpg', 'rb') as f:
             form = {
-                "file": f,
+                "file0": f,
                 "data": json.dumps(data, default=str)
             }
             response = self.client.post('/api/album/', data=form)
@@ -54,6 +69,20 @@ class ViewAlbumTests(TestCase):
         assert album.description == data['description']
         assert album.start_date == data['start_date']
         assert album.end_date == data['end_date']
+
+    def test_bad_image_extension_returns_400(self):
+        data = ViewAlbumTests.album_data_payload_with_unique_name()
+
+        with open('./restapp/tests/resources/not_allowed_extension.gif', 'rb') as f:
+            form = {
+                "file0": f,
+                "data": json.dumps(data, default=str)
+            }
+            response = self.client.post('/api/album/', data=form)
+            assert response.status_code == 400
+            assert response.data['detail'] == 'image extension must be one of: JPEG,JPG,PNG'
+
+
 
     def test_list_albums(self):
         album1 = Album.objects.create(
@@ -86,4 +115,37 @@ class ViewAlbumTests(TestCase):
         assert response.status_code == 200
         assert response.data['name'] == album.name
         assert response.data['description'] == album.description
+
+    def test_create_artifact(self):
+        album = Album.objects.create(name="test album1", description="this is a description",
+            cover_image_key='aaa/bbb', start_date=datetime.date(1981, 1, 1), end_date=datetime.date(1981, 12, 1))
+        data = ViewAlbumTests.artifact_data_payload(album.id)
+
+        with open('./restapp/tests/resources/sample_photo_front.jpg', 'rb') as image_front:
+            with open('./restapp/tests/resources/sample_photo_back.jpg', 'rb') as image_back:
+                form = {
+                    "file0": image_front,
+                    "file1": image_back,
+                    "data": json.dumps(data, default=str)
+                }
+                response = self.client.post('/api/artifact/', data=form)
+
+                uuid_regex = re.compile('^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}\Z',
+                                        re.I)
+
+                assert response.status_code == 200
+                assert response.data['caption'] == data['caption']
+                assert response.data['details'] == data['details']
+                assert response.data['date'] == data['date'].isoformat()
+
+                pik = response.data['primary_image_key'].split('/')
+                assert pik[0] == 'artifact'
+                assert bool(uuid_regex.match(pik[1]))
+                assert pik[2] == 'primary'
+
+                pik = response.data['secondary_image_key'].split('/')
+                assert pik[0] == 'artifact'
+                assert bool(uuid_regex.match(pik[1]))
+                assert pik[2] == 'secondary'
+
 

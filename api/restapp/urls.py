@@ -6,8 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import AuthTestView, AlbumView, AlbumDetail
-
+from .views import AuthTestView, AlbumView, AlbumDetail, ArtifactView
 
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -15,4 +14,5 @@ urlpatterns = [
     path('api/token/authcheck/', AuthTestView.as_view(), name='test-auth'),
     re_path('api/album/?$', AlbumView.as_view(), name='album-list'),
     path('api/album/<int:pk>', AlbumDetail.as_view(), name='album-detail'),
+    re_path('api/artifact/?$', ArtifactView.as_view(), name='artifact-list'),
 ]

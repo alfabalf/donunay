@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 
-from .models import Album
+from .models import Album, Artifact
 
 
 def validate_s3_key(value):
@@ -21,6 +21,10 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class ArtifactSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Artifact
+        fields = '__all__'
 
     def validate_primary_image_key(self, value):
         validate_s3_key(value)

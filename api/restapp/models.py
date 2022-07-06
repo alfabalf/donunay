@@ -31,13 +31,11 @@ class Album(models.Model):
 
 
 class AlbumPage(models.Model):
-    id = models.IntegerField(primary_key=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE, blank=False, null=False)
     page_image_key = models.CharField(unique=True, max_length=256, null=False)
 
 
 class Artifact(models.Model):
-    id = models.IntegerField(primary_key=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE, blank=False)
     caption = models.TextField()
     details = models.TextField()
@@ -47,13 +45,11 @@ class Artifact(models.Model):
 
 
 class Comment(models.Model):
-    id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
     Artifact = models.ForeignKey(Artifact, on_delete=models.CASCADE, blank=False)
     message = models.TextField()
 
 
 class Personage(models.Model):
-    id = models.IntegerField(primary_key=True)
     name = models.TextField()
     artifacts = models.ManyToManyField(Artifact)

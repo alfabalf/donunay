@@ -142,6 +142,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'restapp.exceptions.custom_exceptions.custom_exception_handler'
 }
 
 
@@ -156,3 +157,5 @@ THUMBNAIL_SIZES = [
     (400, 400),
     (200, 200)
 ]
+
+VALID_IMAGE_EXTENSIONS = ['JPEG', 'JPG', 'PNG']
