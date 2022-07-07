@@ -13,7 +13,6 @@ import boto3
 
 class ViewAlbumTests(TestCase):
 
-    default_password = 'password'
     bucket = str(uuid.uuid4())
     session = boto3.session.Session(profile_name=settings.AWS_PROFILE)
     s3 = session.client("s3", region_name='ap-southeast-2', endpoint_url='http://localhost:4566')
@@ -31,19 +30,6 @@ class ViewAlbumTests(TestCase):
             "end_date": end_date
         }
 
-    @staticmethod
-    def artifact_data_payload(album_id):
-        album_id = album_id
-        caption = "the caption"
-        details = "some describing details"
-        date = datetime.date(1981, 6, 6)
-
-        return {
-            "album_id": album_id,
-            "caption": caption,
-            "details": details,
-            "date": date
-        }
 
     def setUp(self):
         try:
@@ -105,7 +91,6 @@ class ViewAlbumTests(TestCase):
         assert response.data[1]['start_date'] == album2.start_date.isoformat()
         assert response.data[1]['end_date'] == album2.end_date.isoformat()
 
-
     def test_get_album(self):
         album = Album.objects.create(
             name="test album1", description="this is a description",
@@ -116,36 +101,5 @@ class ViewAlbumTests(TestCase):
         assert response.data['name'] == album.name
         assert response.data['description'] == album.description
 
-    def test_create_artifact(self):
-        album = Album.objects.create(name="test album1", description="this is a description",
-            cover_image_key='aaa/bbb', start_date=datetime.date(1981, 1, 1), end_date=datetime.date(1981, 12, 1))
-        data = ViewAlbumTests.artifact_data_payload(album.id)
-
-        with open('./restapp/tests/resources/sample_photo_front.jpg', 'rb') as image_front:
-            with open('./restapp/tests/resources/sample_photo_back.jpg', 'rb') as image_back:
-                form = {
-                    "file0": image_front,
-                    "file1": image_back,
-                    "data": json.dumps(data, default=str)
-                }
-                response = self.client.post('/api/artifact/', data=form)
-
-                uuid_regex = re.compile('^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}\Z',
-                                        re.I)
-
-                assert response.status_code == 200
-                assert response.data['caption'] == data['caption']
-                assert response.data['details'] == data['details']
-                assert response.data['date'] == data['date'].isoformat()
-
-                pik = response.data['primary_image_key'].split('/')
-                assert pik[0] == 'artifact'
-                assert bool(uuid_regex.match(pik[1]))
-                assert pik[2] == 'primary'
-
-                pik = response.data['secondary_image_key'].split('/')
-                assert pik[0] == 'artifact'
-                assert bool(uuid_regex.match(pik[1]))
-                assert pik[2] == 'secondary'
 
 
